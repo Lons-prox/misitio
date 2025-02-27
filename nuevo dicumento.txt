@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitio Web con Fases</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 90%;
+            width: 500px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.5s ease;
+        }
+
+        .timer-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 1rem auto;
+        }
+
+        .timer-circle {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-circle circle {
+            fill: none;
+            stroke-width: 6;
+            stroke-linecap: round;
+        }
+
+        .timer-circle .bg {
+            stroke: rgba(255, 255, 255, 0.2);
+        }
+
+        .timer-circle .progress {
+            stroke: #4CAF50;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            animation: progress 10s linear forwards;
+        }
+
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .skip-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .skip-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        @keyframes progress {
+            from { stroke-dashoffset: 440; }
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="phase-title">Fase <span id="phase-number">1</span>/4</h1>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="timer-container">
+            <svg class="timer-circle">
+                <circle class="bg" cx="75" cy="75" r="70"></circle>
+                <circle class="progress" cx="75" cy="75" r="70"></circle>
+            </svg>
+            <div class="timer-text" id="timer">10</div>
+        </div>
+        <button class="skip-btn" onclick="skipPhase()">Saltar Fase</button>
+    </div>
+
+    <script>
+        let currentPhase = 1;
+        let timeLeft = 10;
+        const totalPhases = 4;
+
+        const phaseNumber = document.getElementById('phase-number');
+        const phaseTitle = document.getElementById('phase-title');
+        const timerElement = document.getElementById('timer');
+        const progressBar = document.getElementById('progress');
+
+        function updateProgressBar() {
+            const progressWidth = (currentPhase - 1) * (100 / totalPhases);
+            progressBar.style.width = `${progressWidth}%`;
+        }
+
+        function startTimer() {
+            const timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    nextPhase();
+                }
+            }, 1000);
+        }
+
+        function nextPhase() {
+            if (currentPhase < totalPhases) {
+                currentPhase++;
+                timeLeft = 10;
+                phaseNumber.textContent = currentPhase;
+                updateProgressBar();
+                startTimer();
+                document.querySelector('.progress').style.animation = 'none';
+                setTimeout(() => {
+                    document.querySelector('.progress').style.animation = 'progress 10s linear forwards';
+                }, 10);
+            } else {
+                window.location.href = 'https://mega.nz/TU_ENLACE_AQUI'; // Enlace final
+            }
+        }
+
+        function skipPhase() {
+            nextPhase();
+        }
+
+        // Iniciar
+        updateProgressBar();
+        startTimer();
+    </script>
+</body>
+</html>
